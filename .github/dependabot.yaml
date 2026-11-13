@@ -8,3 +8,93 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: docker
+    directory: /test/common-utils/devcontainer-custom-home
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/common-utils/devcontainer-info
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/common-utils/devcontainer-ruby-zshrc
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/conda/install_conda_patched_packages_with_codespace
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/docker-in-docker
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/docker-in-docker/docker_iptables_switch_at_runtime_non_root
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/docker-outside-of-docker
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/multitargeting
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net10.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net5.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net6.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net7.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net8.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/net9.0
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: nuget
+    directory: /test/dotnet/projects/netcoreapp3.1
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: pip
+    directory: /test/oryx/sample-python
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/ruby/install_ruby_trixie_base
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /test/terraform/tflint_checksum_fallback_test
+    schedule:
+      interval: weekly
