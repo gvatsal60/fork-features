@@ -28,17 +28,17 @@ ls -la /usr/lib/systemd/system/docker* || echo "No system docker service files"
 echo "6. Checking Docker daemon status..."
 if ! docker info >/dev/null 2>&1; then
     echo "Docker daemon not running, starting it..."
-    
+
     # Check if docker-init script exists
     if [ -f "/usr/local/share/docker-init.sh" ]; then
         echo "Starting Docker using docker-init.sh..."
-        
+
         # Clear any existing log
         rm -f /tmp/dockerd.log
-        
+
         # Start docker-init in background
         nohup /usr/local/share/docker-init.sh > /tmp/docker-init.log 2>&1 &
-        
+
         # Wait for Docker to start with better debugging
         echo "Waiting for Docker daemon to start..."
         for i in {1..30}; do
@@ -47,17 +47,17 @@ if ! docker info >/dev/null 2>&1; then
                 break
             fi
             echo "Waiting... ($i/30)"
-            
+
             # Show dockerd logs if available
             if [ -f "/tmp/dockerd.log" ]; then
                 echo "--- Recent dockerd.log entries ---"
                 tail -5 /tmp/dockerd.log || echo "Could not read dockerd.log"
                 echo "--- End of dockerd.log ---"
             fi
-            
+
             sleep 2
         done
-        
+
         # Final check with detailed error reporting
         if ! docker info >/dev/null 2>&1; then
             echo "ERROR: Docker daemon failed to start after 60 seconds"

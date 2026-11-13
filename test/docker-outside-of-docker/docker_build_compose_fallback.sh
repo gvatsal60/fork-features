@@ -98,7 +98,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi

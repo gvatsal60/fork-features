@@ -42,7 +42,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -102,7 +102,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -116,14 +116,14 @@ get_previous_version() {
     local variable_name=$3
     local mode=$4
     prev_version=${!variable_name#v}
-    
+
     output=$(curl -s "$repo_url");
 
     message=$(echo "$output" | jq -r '.message')
 
     if [ $mode == "mode1" ]; then
         message="API rate limit exceeded"
-    else 
+    else
         message=""
     fi
 
@@ -132,11 +132,11 @@ get_previous_version() {
         echo -e "\nAttempting to find latest version using GitHub tags."
         find_prev_version_from_git_tags prev_version "$url" "tags/v"
         declare -g ${variable_name}="v${prev_version}"
-    else 
+    else
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -156,7 +156,7 @@ get_helm() {
 install_helm() {
     mode=$1
     HELM_VERSION="v3.14.xyz"
-    echo -e "\n👉Trying to install HELM_VERSION = ${HELM_VERSION}"; 
+    echo -e "\n👉Trying to install HELM_VERSION = ${HELM_VERSION}";
     sudo mkdir -p /tmp/helm
     get_helm "${HELM_VERSION}"
     if grep -q "BlobNotFound" "/tmp/helm/${helm_filename}"; then

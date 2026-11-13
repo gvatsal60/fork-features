@@ -95,7 +95,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -109,26 +109,26 @@ get_previous_version() {
     local variable_name=$3
     local mode=$4
     prev_version=${!variable_name}
-    
+
     echo -e "\nAttempting to find latest version using Github Api."
 
     output=$(curl -s "$repo_url");
     message=$(echo "$output" | jq -r '.message')
 
-    if [[ $mode != "install_from_github_api_valid" ]]; then 
+    if [[ $mode != "install_from_github_api_valid" ]]; then
         message="API rate limit exceeded"
     fi
-    
+
     if [[ $message == "API rate limit exceeded"* ]]; then
         echo -e "\nAttempting to find latest version using Github Api Failed. Exceeded API Rate Limit."
         echo -e "\nAttempting to find latest version using Github Tags."
         find_prev_version_from_git_tags prev_version "$url" "tags/v"
         declare -g ${variable_name}="${prev_version}"
-    else 
+    else
         echo -e "\nAttempting to find latest version using Github Api Succeeded."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -147,7 +147,7 @@ install_using_get_previous_version() {
     echo -e "\nAttempting to install v${buildx_version}"
     wget https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name}
 }
-    
+
 install_docker_buildx() {
     mode=$1
     echo -e "\n${HL} Creating a scenario for fallback${N}\n"
@@ -159,7 +159,7 @@ install_docker_buildx() {
 
     docker_buildx_url="https://github.com/docker/buildx"
     wget https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name} || install_using_get_previous_version "${docker_buildx_url}" "${mode}"
-    
+
     docker_home="/usr/libexec/docker"
     cli_plugins_dir="${docker_home}/cli-plugins"
 

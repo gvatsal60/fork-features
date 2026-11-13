@@ -19,4 +19,3 @@ check "installs compose-switch as the flag is on" bash -c "[[ -f /usr/local/bin/
 
 # Report result
 reportResults
-

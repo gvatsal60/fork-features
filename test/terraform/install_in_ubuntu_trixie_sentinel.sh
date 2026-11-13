@@ -18,5 +18,3 @@ check "sentinel" sentinel --version
 
 # Report result
 reportResults
-
-

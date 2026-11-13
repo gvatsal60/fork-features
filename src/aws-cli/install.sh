@@ -117,7 +117,7 @@ install() {
     else
         unzip "${scriptZipFile}"
     fi
-    
+
     ./aws/install
 
     # AWS bash completion

@@ -99,15 +99,15 @@ fi
 # Install Time::Piece Perl module required by OpenSSL 3.0.18+ build system on CentOS 7/RHEL 7
 install_time_piece() {
     echo "(*) Ensuring Time::Piece Perl module is available for OpenSSL 3.0.18+ build..."
-    
+
     # Check if Time::Piece is already available (it's usually in Perl core)
     if perl -MTime::Piece -e 'exit 0' 2>/dev/null; then
         echo "(*) Time::Piece already available"
         return 0
     fi
-    
+
     echo "(*) Time::Piece not found, installing perl-Time-Piece package..."
-    
+
     # Install perl-Time-Piece package for CentOS 7/RHEL 7
     if ${INSTALL_CMD} perl-Time-Piece; then
         echo "(*) perl-Time-Piece installed for OpenSSL 3.0.18+ build"
@@ -531,9 +531,9 @@ install_cosign() {
 
     local cosign_filename="/tmp/cosign_${version_for_url}_${architecture}.deb"
     local cosign_url="https://github.com/sigstore/cosign/releases/download/v${version_for_url}/cosign_${version_for_url}_${architecture}.deb"
-    
+
     echo "Downloading cosign from: ${cosign_url}"
-    
+
     if curl -L -f --fail-with-body "${cosign_url}" -o "$cosign_filename" 2>/dev/null; then
         echo "(*) Successfully downloaded cosign v${COSIGN_VERSION}"
     else
@@ -541,17 +541,17 @@ install_cosign() {
         # Try previous version
         find_prev_version_from_git_tags COSIGN_VERSION "https://github.com/sigstore/cosign"
         echo -e "\nAttempting to install previous cosign ${COSIGN_VERSION} version as fallback mechanism"
-        
+
         version_for_url="${COSIGN_VERSION#v}"
         cosign_filename="/tmp/cosign_${version_for_url}_${architecture}.deb"
         cosign_url="https://github.com/sigstore/cosign/releases/download/v${version_for_url}/cosign_${version_for_url}_${architecture}.deb"
-        
+
         if ! curl -L -f --fail-with-body "${cosign_url}" -o "$cosign_filename" 2>/dev/null; then
             echo "(!) Failed to download cosign v${COSIGN_VERSION} as fallback"
             return 1
         fi
     fi
-    
+
     # Install the package
     if [ -f "$cosign_filename" ]; then
         dpkg -i "$cosign_filename"
@@ -578,13 +578,13 @@ cosign_verification() {
     else
          echo "(*) cosign is already available on the system"
     fi
-    
+
     echo "(*) Attempting COSIGN verification for Python ${VERSION}..."
-    
+
     # Check if COSIGN signature files exist (these don't exist yet for Python releases)
     local cosign_sig_url="${cpython_tgz_url}.sig"
     local cosign_cert_url="${cpython_tgz_url}.pem"
-    
+
     # Download COSIGN signature and certificate files with proper error handling
     echo "(*) Checking for cosign signature files..."
     if ! curl -sSL -f --fail-with-body -o "/tmp/python-src/${cpython_tgz_filename}.sig" "${cosign_sig_url}" 2>/dev/null; then
@@ -592,13 +592,13 @@ cosign_verification() {
         echo "    Signature URL: ${cosign_sig_url}"
         return 1
     fi
-    
+
     if ! curl -sSL -f --fail-with-body -o "/tmp/python-src/${cpython_tgz_filename}.pem" "${cosign_cert_url}" 2>/dev/null; then
         echo "(!) COSIGN certificate file not available for Python ${VERSION}"
         echo "    Certificate URL: ${cosign_cert_url}"
         return 1
     fi
-    
+
     # Perform COSIGN verification
     if cosign verify-blob \
         --certificate "/tmp/python-src/${cpython_tgz_filename}.pem" \
@@ -615,7 +615,7 @@ cosign_verification() {
 }
 
 # GPG verification for python versions < 3.14
-gpg_verification() {    
+gpg_verification() {
     echo "(*) Using GPG signature verification..."
     if [[ ${VERSION_CODENAME} = "centos7" ]] || [[ ${VERSION_CODENAME} = "rhel7" ]]; then
         receive_gpg_keys_centos7 PYTHON_SOURCE_GPG_KEYS
@@ -678,7 +678,7 @@ install_from_source() {
     # CPython release artifacts are additionally signed with Sigstore starting with the Python 3.11.0
     local major_version=$(echo "$VERSION" | cut -d. -f1)
     local minor_version=$(echo "$VERSION" | cut -d. -f2)
-    echo "(*) Detected Python version: ${major_version}.${minor_version}"    
+    echo "(*) Detected Python version: ${major_version}.${minor_version}"
     if (( major_version > 3 )) || { (( major_version == 3 )) && (( minor_version >= 14 )); }; then
         echo "(*) Python 3.14+ detected. Attempting cosign verification..."
         if cosign_verification "$VERSION"; then
@@ -1140,4 +1140,3 @@ fi
 clean_up
 
 echo "Done!"
-

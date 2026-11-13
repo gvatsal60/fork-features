@@ -45,8 +45,8 @@ check_version_switch() {
         while IFS= read -r line; do
             # Split using " - priority " as a delimiter.
             PATH=$(/usr/bin/awk -F' - priority ' '{print $1}' <<< "$line" | /usr/bin/xargs /bin/echo)
-            PRIORITY=$(/usr/bin/awk -F' - priority ' '{print $2}' <<< "$line" | /usr/bin/xargs /bin/echo)    
-            TEMP_VERSIONS+=("${PRIORITY} ${PATH}") 
+            PRIORITY=$(/usr/bin/awk -F' - priority ' '{print $2}' <<< "$line" | /usr/bin/xargs /bin/echo)
+            TEMP_VERSIONS+=("${PRIORITY} ${PATH}")
             echo "$INDEX) $PATH (Priority: $PRIORITY_VALUE)"
             ((INDEX++))
         done <<< "${PYTHON_ALTERNATIVES}"
@@ -75,7 +75,7 @@ check_version_switch() {
         echo "Error: Less than 4 Python versions registered in update-alternatives."
         exit 1
     fi
-    
+
     export PATH="/usr/bin:$PATH"
     echo -e "\nSwitching to different versions using update-alternatives --set command...\n"
     for CHOICE in {1..4}; do

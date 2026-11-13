@@ -40,4 +40,3 @@ check "clippy not installed" check_component_not_installed "clippy"
 
 # Report result
 reportResults
-

@@ -8,7 +8,7 @@
 # Maintainer: The Dev Container spec maintainers
 #
 # Run this script to replace aws_bash_completer and aws_zsh_completer.sh with the latest and greatest available version
-# 
+#
 COMPLETER_SCRIPTS=$(dirname "${BASH_SOURCE[0]}")
 BASH_COMPLETER_SCRIPT="$COMPLETER_SCRIPTS/vendor/aws_bash_completer"
 ZSH_COMPLETER_SCRIPT="$COMPLETER_SCRIPTS/vendor/aws_zsh_completer.sh"

@@ -94,7 +94,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     echo "${!variable_name}"
     echo "$(echo "${requested_version}" | grep -o "." | wc -l)"
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
@@ -156,7 +156,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -231,7 +231,7 @@ install_previous_version() {
         echo -e "\nAttempting to install previous version v${PHP_VERSION}"
         init_php_install
         wget -O php.tar.xz "$PHP_URL"
-    else 
+    else
         echo -e "\nFailed to install v$PHP_VERSION"
     fi
 }
@@ -240,7 +240,7 @@ install_php() {
     PHP_VERSION="$1"
 
     init_php_install
-    
+
     wget -O php.tar.xz "$PHP_URL" || install_previous_version "$PHP_VERSION"
 
     tar -xf $PHP_SRC_DIR/php.tar.xz -C "$PHP_SRC_DIR" --strip-components=1
@@ -256,7 +256,7 @@ install_php() {
     PHP_MINOR_VERSION=${versions[1]}
 
     VERSION_CONFIG=""
-    if (( $(($PHP_MAJOR_VERSION)) >= 8 )) || (( $(($PHP_MAJOR_VERSION)) == 7 && $(($PHP_MINOR_VERSION)) >= 4 )); then 
+    if (( $(($PHP_MAJOR_VERSION)) >= 8 )) || (( $(($PHP_MAJOR_VERSION)) == 7 && $(($PHP_MINOR_VERSION)) >= 4 )); then
         VERSION_CONFIG="--with-pear"
     fi
 

@@ -93,7 +93,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -107,19 +107,19 @@ get_previous_version() {
     local variable_name=$3
     local mode=$4
     prev_version=${!variable_name}
-    
+
     output=$(curl -s "$repo_url");
 
     if echo "$output" | jq -e 'type == "object"' > /dev/null; then
       message=$(echo "$output" | jq -r '.message')
-      
+
       if [[ $message == "API rate limit exceeded"* ]]; then
             echo -e "\nAn attempt to find latest version using GitHub Api Failed... \nReason: ${message}"
             echo -e "\nAttempting to find latest version using GitHub tags."
             find_prev_version_from_git_tags prev_version "$url" "tags/v"
             declare -g ${variable_name}="${prev_version}"
        fi
-    elif echo "$output" | jq -e 'type == "array"' > /dev/null; then 
+    elif echo "$output" | jq -e 'type == "array"' > /dev/null; then
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.[1].tag_name')
         declare -g ${variable_name}="${version#v}"

@@ -69,7 +69,7 @@ install_using_github() {
     elif [ "${CLI_VERSION}" = "prerelease" ]; then
         find_version_from_git_tags CLI_VERSION "https://github.com/github/copilot-cli" "tags/v" "." "false" "(-[0-9]+)?" "${COPILOT_CLI_LAST_KNOWN_VERSION}"
         download_from_github "https://github.com/github/copilot-cli/releases/download/v${CLI_VERSION}/${cli_filename}"
-        
+
     else
         # Install specific version
         # Add leading v to version if it doesn't start with v

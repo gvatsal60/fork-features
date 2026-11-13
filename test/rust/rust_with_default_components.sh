@@ -28,4 +28,3 @@ check "clippy is installed" check_component_installed "clippy"
 
 # Report result
 reportResults
-

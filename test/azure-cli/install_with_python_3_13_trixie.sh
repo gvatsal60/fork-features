@@ -19,4 +19,3 @@ check "version" az  --version
 
 # Report result
 reportResults
-

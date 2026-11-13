@@ -14,4 +14,3 @@ check "perl" bash -c "git -c grep.patternType=perl grep -q 'a.+b'"
 
 # Report result
 reportResults
-

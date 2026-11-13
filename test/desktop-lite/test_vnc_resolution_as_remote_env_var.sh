@@ -21,7 +21,7 @@ check_process_running() {
 }
 
 check "Whether xtigervnc is Running" check_process_running 5901
-check "xtigervnc resolution" bash -c 'ps -x -ww | grep Xtigervnc | awk "{for(i=1;i<=NF;i++) if (\$i ~ /-geometry/) {print \$(i+1); exit}}"' 
+check "xtigervnc resolution" bash -c 'ps -x -ww | grep Xtigervnc | awk "{for(i=1;i<=NF;i++) if (\$i ~ /-geometry/) {print \$(i+1); exit}}"'
 sleep 2
 check "Whether no_vnc is Running" check_process_running 6080
 

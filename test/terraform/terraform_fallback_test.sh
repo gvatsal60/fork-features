@@ -34,7 +34,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -94,7 +94,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -124,7 +124,7 @@ get_previous_version() {
     local variable_name=$3
     local mode=$4
     prev_version=${!variable_name}
-    
+
     output=$(curl -s "$repo_url");
 
     # install jq
@@ -135,7 +135,7 @@ get_previous_version() {
         message="API rate limit exceeded";
     elif [[ "$mode" == "mode2" ]]; then
         message=""
-    fi 
+    fi
     if [[ $message == "API rate limit exceeded"* ]]; then
         echo -e "\nAn attempt to find latest version using GitHub Api Failed... \nReason: ${message}"
         echo -e "\nAttempting to find latest version using GitHub tags."
@@ -145,7 +145,7 @@ get_previous_version() {
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -203,4 +203,3 @@ check "terraform version as installed by test after fallbacking from the dummy v
 
 # Report result
 reportResults
-

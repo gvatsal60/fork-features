@@ -142,7 +142,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -155,11 +155,11 @@ get_previous_version() {
     local repo_url=$2
     local variable_name=$3
     prev_version=${!variable_name}
-    
+
     output=$(curl -s "$repo_url");
 
     check_packages jq
-    
+
     if echo "$output" | jq -e 'type == "object"' > /dev/null; then
         message=$(echo "$output" | jq -r '.message')
         if [[ $message == "API rate limit exceeded"* ]]; then
@@ -172,8 +172,8 @@ get_previous_version() {
         echo -e "\nAttempting to find previous version using GitHub Api."
         version=$(echo "$output" | jq -r '.[1].tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
-    echo "${variable_name}=${!variable_name}" 
+    fi
+    echo "${variable_name}=${!variable_name}"
 }
 
 get_github_api_repo_url() {
@@ -333,7 +333,7 @@ else
         fi
         #install cli + buildx first
         apt-get -y install --no-install-recommends ${cli_package_name}${cli_version_suffix} "${buildx[@]}"
-        
+
         # Backward compatibility: Older Docker CE versions bundled buildx with CLI
         # Modern versions have separate packages, but this ensures consistent behavior
         buildx_path="/usr/libexec/docker/cli-plugins/docker-buildx"
@@ -341,7 +341,7 @@ else
             echo "(*) Removing docker-buildx (bundled in older Docker CE) since installDockerBuildx is disabled..."
             rm -f "${buildx_path}"
         fi
-        
+
         if [ "${DOCKER_DASH_COMPOSE_VERSION}" != "v1" ]; then
             apt-get -y install --no-install-recommends docker-compose-plugin
         fi
@@ -357,14 +357,14 @@ if [ "${DOCKER_DASH_COMPOSE_VERSION}" != "none" ]; then
             echo "(!) Docker outside of docker does not support machine architecture '$architecture'. Please use an x86-64 or ARM64 machine."
             exit 1
     esac
-    docker_compose_path="/usr/local/bin/docker-compose" 
+    docker_compose_path="/usr/local/bin/docker-compose"
     # Install Docker Compose if not already installed  and is on a supported architecture
     if type docker-compose > /dev/null 2>&1; then
         echo "Docker Compose already installed."
     elif [ "${DOCKER_DASH_COMPOSE_VERSION}" = "v1" ]; then
         err "The final Compose V1 release, version 1.29.2, was May 10, 2021. These packages haven't received any security updates since then. Use at your own risk."
         INSTALL_DOCKER_COMPOSE_SWITCH="false"
-        
+
         if [ "${target_compose_arch}" = "x86_64" ]; then
             echo "(*) Installing docker compose v1..."
             curl -fsSL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o ${docker_compose_path}

@@ -29,5 +29,3 @@ check "log file contents" bash -c "cat /tmp/container-init.log"
 
 # Report result
 reportResults
-
-

@@ -44,14 +44,14 @@ check_version_switch() {
         while IFS= read -r line; do
             # Split using " - priority " as a delimiter.
             PATH=$(/usr/bin/awk -F' - priority ' '{print $1}' <<< "$line" | /usr/bin/xargs /bin/echo)
-            PRIORITY=$(/usr/bin/awk -F' - priority ' '{print $2}' <<< "$line" | /usr/bin/xargs /bin/echo)    
-            TEMP_VERSIONS+=("${PRIORITY} ${PATH}") 
+            PRIORITY=$(/usr/bin/awk -F' - priority ' '{print $2}' <<< "$line" | /usr/bin/xargs /bin/echo)
+            TEMP_VERSIONS+=("${PRIORITY} ${PATH}")
             echo "$INDEX) $PATH (Priority: $PRIORITY_VALUE)"
             ((INDEX++))
         done <<< "${PYTHON_ALTERNATIVES}"
     fi
 
-    export PATH="/usr/bin:$PATH"   
+    export PATH="/usr/bin:$PATH"
     # Sort by priority (numerically ascending)
     IFS=$'\n' TEMP_VERSIONS=($(sort -n <<<"${TEMP_VERSIONS[*]}"))
     unset IFS

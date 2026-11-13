@@ -17,4 +17,3 @@ check "log-contents" bash -c "cat /tmp/dockerd.log | grep 'API listen on /var/ru
 
 # Report result
 reportResults
-

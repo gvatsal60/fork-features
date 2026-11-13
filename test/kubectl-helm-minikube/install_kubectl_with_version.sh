@@ -14,7 +14,7 @@ set +e
     exit_code=$?
     check "kubectl-version-${KUBECTL_VERSION}-installed" bash -c "echo ${exit_code} | grep 0"
     echo "kubectl version:"
-    kubectl version --client 
+    kubectl version --client
 
     helm version --short | grep "${HELM_VERSION}"
     exit_code=$?
@@ -22,7 +22,7 @@ set +e
     echo "helm version:"
     helm version --short
 
-    minikube version --short | grep "${MINIKUBE_VERSION}"  
+    minikube version --short | grep "${MINIKUBE_VERSION}"
     exit_code=$?
     check "minikube-version-${MINIKUBE_VERSION}-installed" bash -c "echo ${exit_code} | grep 0"
     echo "minikube version:"

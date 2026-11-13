@@ -11,7 +11,7 @@ source dev-container-features-test-lib
 check "npm_version_upgraded_or_functional" bash -c "
     npm --version >/dev/null
     NPM_MAJOR=\$(npm --version | cut -d. -f1)
-    
+
     if [ \$NPM_MAJOR -ge 11 ]; then
         echo 'npm successfully upgraded to version 11+ (\$NPM_MAJOR.x)'
         exit 0

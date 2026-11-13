@@ -138,7 +138,7 @@ check_packages() {
                 echo "Running $PKG_UPDATE..."
                 eval "$PKG_UPDATE"
             fi
-            
+
             # Install the package
             echo "Installing package: $pkg"
             eval "$PKG_INSTALL $pkg"
@@ -171,7 +171,7 @@ run_as_user() {
     local user="$1"
     shift
     local cmd="$*"
-    
+
     if command -v runuser > /dev/null; then
         if [ "$PKG_MANAGER" = "apk" ]; then
             runuser "$user" -c "$cmd"
@@ -215,7 +215,7 @@ if ! conda --version &> /dev/null ; then
     mkdir -p $CONDA_DIR
 
     chown -R "${USERNAME}:conda" "${CONDA_DIR}"
-    chmod -R g+r+w "${CONDA_DIR}"    
+    chmod -R g+r+w "${CONDA_DIR}"
 
     echo "Installing Anaconda..."
 
@@ -233,7 +233,7 @@ if ! conda --version &> /dev/null ; then
             && wget -q https://repo.anaconda.com/archive/Anaconda3-${CONDA_VERSION}-Linux-aarch64.sh -O /tmp/anaconda-install.sh \
             && /bin/bash /tmp/anaconda-install.sh -u -b -p ${CONDA_DIR}"
     fi
-    
+
     if [ "${VERSION}" = "latest" ] || [ "${VERSION}" = "lts" ]; then
         PATH=$PATH:${CONDA_DIR}/bin
         conda update -y conda
