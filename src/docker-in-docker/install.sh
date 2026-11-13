@@ -175,7 +175,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -192,18 +192,18 @@ get_previous_version() {
     output=$(curl -s "$repo_url");
     if echo "$output" | jq -e 'type == "object"' > /dev/null; then
       message=$(echo "$output" | jq -r '.message')
-      
+
       if [[ $message == "API rate limit exceeded"* ]]; then
             echo -e "\nAn attempt to find latest version using GitHub Api Failed... \nReason: ${message}"
             echo -e "\nAttempting to find latest version using GitHub tags."
             find_prev_version_from_git_tags prev_version "$url" "tags/v"
             declare -g ${variable_name}="${prev_version}"
        fi
-    elif echo "$output" | jq -e 'type == "array"' > /dev/null; then 
+    elif echo "$output" | jq -e 'type == "array"' > /dev/null; then
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.[1].tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -239,12 +239,12 @@ elif [[ "${ID}" = "rhel" || "${ID}" = "fedora" || "${ID}" = "azurelinux" || "${I
             break
         fi
     done
-    
+
     if [ -z "${PKG_MGR_CMD}" ]; then
         err "Unable to find a supported package manager (tdnf, dnf, microdnf, yum)"
         exit 1
     fi
-    
+
     architecture="$(rpm --eval '%{_arch}' 2>/dev/null || uname -m)"
 else
     err "Linux distro ${ID} not supported."
@@ -288,7 +288,7 @@ else
         fi
         echo "(*) ${VERSION_CODENAME} is supported for Docker CE installation (supported: ${DOCKER_LICENSED_ARCHIVE_VERSION_CODENAMES}) - setting up Docker repository"
     elif [ "${ADJUSTED_ID}" = "rhel" ]; then
-        
+
         echo "RHEL-based system (${ID}) detected - using Docker CE packages"
     fi
 fi
@@ -304,7 +304,7 @@ case ${ADJUSTED_ID} in
         ;;
     rhel)
         check_packages $base_packages tar gawk shadow-utils policycoreutils  procps-ng systemd-libs systemd-devel
-       
+
         ;;
 esac
 
@@ -363,7 +363,7 @@ if [ "${USE_MOBY}" = "true" ]; then
             ;;
         rhel)
             echo "(*) ${ID} detected - checking for Moby packages..."
-        
+
             # Check if moby packages are available in default repos
             if ${PKG_MGR_CMD} list available moby-engine >/dev/null 2>&1; then
                 echo "(*) Using built-in ${ID} Moby packages"
@@ -401,7 +401,7 @@ EOF
                 err "Moby packages are not available for ${ID}. Please use 'moby': false option."
                 exit 1
                 ;;
-            esac    
+            esac
         fi
         ;;
     esac
@@ -418,7 +418,7 @@ else
             # Docker CE repository setup for RHEL-based systems
             setup_docker_ce_repo() {
                 curl -fsSL https://download.docker.com/linux/centos/gpg > /etc/pki/rpm-gpg/docker-ce.gpg
-                cat > /etc/yum.repos.d/docker-ce.repo << EOF  
+                cat > /etc/yum.repos.d/docker-ce.repo << EOF
 [docker-ce-stable]
 name=Docker CE Stable
 baseurl=https://download.docker.com/linux/centos/9/\$basearch/stable
@@ -431,7 +431,7 @@ EOF
             }
             install_azure_linux_deps() {
                 echo "(*) Installing device-mapper libraries for Docker CE..."
-                [ "${ID}" != "mariner" ] && ${PKG_MGR_CMD} -y install device-mapper-libs 2>/dev/null || echo "(*) Device-mapper install failed, proceeding"   
+                [ "${ID}" != "mariner" ] && ${PKG_MGR_CMD} -y install device-mapper-libs 2>/dev/null || echo "(*) Device-mapper install failed, proceeding"
                 echo "(*) Installing additional Docker CE dependencies..."
                 ${PKG_MGR_CMD} -y install libseccomp libtool-ltdl systemd-libs libcgroup tar xz || {
                     echo "(*) Some optional dependencies could not be installed, continuing..."
@@ -444,17 +444,17 @@ EOF
                     echo "/var/lib/docker(/.*)? system_u:object_r:container_file_t:s0" >> /etc/selinux/targeted/contexts/files/file_contexts.local 2>/dev/null || true
                 fi
             }
-            
+
             # Special handling for RHEL Docker CE installation
             case "${ID}" in
                 azurelinux|mariner)
                     echo "(*) ${ID} detected"
                     echo "(*) Note: Moby packages work better on Azure Linux. Consider using 'moby': true"
                     echo "(*) Setting up Docker CE repository..."
-                    
+
                     setup_docker_ce_repo
                     install_azure_linux_deps
-                    
+
                     if [ "${USE_MOBY}" != "true" ]; then
                         echo "(*) Docker CE installation for Azure Linux - skipping container-selinux"
                         echo "(*) Note: SELinux policies will be minimal but Docker will function normally"
@@ -463,20 +463,20 @@ EOF
                         echo "(*) Using Moby - container-selinux not required"
                     fi
                     ;;
-                *)     
+                *)
                     # Standard RHEL/CentOS/Fedora approach
                     if command -v dnf >/dev/null 2>&1; then
                         dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
                     elif command -v yum-config-manager >/dev/null 2>&1; then
                         yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-                    else  
+                    else
                         # Manual fallback
                         setup_docker_ce_repo
             fi
             ;;
         esac
         ;;
-    esac    
+    esac
 fi
 
 # Refresh package database
@@ -511,7 +511,7 @@ else
         apt-cache madison ${cli_package_name} | awk -F"|" '{print $2}' | grep -oP '^(.+:)?\K.+'
         exit 1
     fi
-    ;;  
+    ;;
 rhel)
      # For RHEL-based systems, use dnf/yum to find versions
             docker_version_escaped="${DOCKER_VERSION//./\\.}"
@@ -583,8 +583,8 @@ else
                 set +e # Handle error gracefully
                     apt-get -y install --no-install-recommends moby-cli${cli_version_suffix} moby-buildx${buildx_version_suffix} moby-engine${engine_version_suffix}
                     exit_code=$?
-                set -e    
-                
+                set -e
+
                 if [ ${exit_code} -ne 0 ]; then
                     err "Packages for moby not available in OS ${ID} ${VERSION_CODENAME} (${architecture}). To resolve, either: (1) set feature option '\"moby\": false' , or (2) choose a compatible OS version (eg: 'ubuntu-24.04')."
                     exit 1
@@ -609,7 +609,7 @@ else
                     ${PKG_MGR_CMD} -y install moby-cli${cli_version_suffix} moby-engine${engine_version_suffix}
                     exit_code=$?
                 set -e
-                
+
                 if [ ${exit_code} -ne 0 ]; then
                     err "Packages for moby not available in OS ${ID} ${VERSION_CODENAME} (${architecture}). To resolve, either: (1) set feature option '\"moby\": false' , or (2) choose a compatible OS version."
                     exit 1
@@ -623,21 +623,21 @@ else
                                # Special handling for Azure Linux Docker CE installation
                 if [ "${ID}" = "azurelinux" ] || [ "${ID}" = "mariner" ]; then
                     echo "(*) Installing Docker CE on Azure Linux (bypassing container-selinux dependency)..."
-                    
+
                     # Use rpm with --force and --nodeps for Azure Linux
                     set +e  # Don't exit on error for this section
                     ${PKG_MGR_CMD} -y install docker-ce${cli_version_suffix} docker-ce-cli${engine_version_suffix} containerd.io
                     install_result=$?
                     set -e
-                    
+
                     if [ $install_result -ne 0 ]; then
                         echo "(*) Standard installation failed, trying manual installation..."
-                        
+
                         echo "(*) Standard installation failed, trying manual installation..."
-                        
+
                         # Create directory for downloading packages
                         mkdir -p /tmp/docker-ce-install
-                        
+
                         # Download packages manually using curl since tdnf doesn't support download
                         echo "(*) Downloading Docker CE packages manually..."
 
@@ -653,10 +653,10 @@ else
 
                         # Get the repository baseurl
                         repo_baseurl="https://download.docker.com/linux/centos/9/${repo_arch}/stable"
-                        
+
                         # Download packages directly
                         cd /tmp/docker-ce-install
-                        
+
                         # Get package names with versions
                         if [ -n "${cli_version_suffix}" ]; then
                             docker_ce_version="${cli_version_suffix#-}"
@@ -665,9 +665,9 @@ else
                             # Get latest version from repository
                             docker_ce_version="latest"
                         fi
-                        
+
                         echo "(*) Attempting to download Docker CE packages from repository..."
-                        
+
                         # Try to download latest packages if specific version fails
                         if ! curl -fsSL "${repo_baseurl}/Packages/docker-ce-${docker_ce_version}.el9.${repo_arch}.rpm" -o docker-ce.rpm 2>/dev/null; then
                             # Fallback: try to get latest available version
@@ -675,7 +675,7 @@ else
                             latest_docker=$(curl -s "${repo_baseurl}/Packages/" | grep -o "docker-ce-[0-9][^\"]*\.el9\.${repo_arch}\.rpm" | head -1)
                             latest_cli=$(curl -s "${repo_baseurl}/Packages/" | grep -o "docker-ce-cli-[0-9][^\"]*\.el9\.${repo_arch}\.rpm" | head -1)
                             latest_containerd=$(curl -s "${repo_baseurl}/Packages/" | grep -o "containerd\.io-[0-9][^\"]*\.el9\.${repo_arch}\.rpm" | head -1)
-                            
+
                             if [ -n "${latest_docker}" ]; then
                                 curl -fsSL "${repo_baseurl}/Packages/${latest_docker}" -o docker-ce.rpm
                                 curl -fsSL "${repo_baseurl}/Packages/${latest_cli}" -o docker-ce-cli.rpm
@@ -692,15 +692,15 @@ else
                             echo "(*) WARNING: Could not install systemd libraries"
                             echo "(*) Docker may fail to start without these"
                         }
-                         
+
                         # Install with rpm --force --nodeps
                         echo "(*) Installing Docker CE packages with dependency override..."
                         rpm -Uvh --force --nodeps *.rpm
-                        
+
                         # Cleanup
                         cd /
                         rm -rf /tmp/docker-ce-install
-                        
+
                         echo "(*) Docker CE installation completed with dependency bypass"
                         echo "(*) Note: Some SELinux functionality may be limited without container-selinux"
                     fi
@@ -782,7 +782,7 @@ if [ "${DOCKER_DASH_COMPOSE_VERSION}" != "none" ]; then
         find_version_from_git_tags compose_version "$docker_compose_url" "tags/v" "." "false" "" "${DOCKER_COMPOSE_LAST_KNOWN_VERSION}"
         echo "(*) Installing docker-compose ${compose_version}..."
         curl -fsSL "https://github.com/docker/compose/releases/download/v${compose_version}/docker-compose-linux-${target_compose_arch}" -o ${docker_compose_path} || {
-                 echo -e "\n(!) Failed to fetch the latest artifacts for docker-compose v${compose_version}..." 
+                 echo -e "\n(!) Failed to fetch the latest artifacts for docker-compose v${compose_version}..."
                  fallback_compose "$docker_compose_url"
         }
 
@@ -823,7 +823,7 @@ if [ "${INSTALL_DOCKER_COMPOSE_SWITCH}" = "true" ] && ! type compose-switch > /d
             fallback_compose-switch "$compose_switch_url"
         fi
         set -e
-        
+
         # Map architecture for compose-switch downloads
         case "${architecture}" in
             amd64|x86_64) target_switch_arch=amd64 ;;
@@ -867,7 +867,7 @@ fallback_buildx() {
     echo -e "\nAttempting to install v${buildx_version}"
     wget https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name}
 }
- 
+
 if [ "${INSTALL_DOCKER_BUILDX}" = "true" ]; then
     buildx_version="latest"
     docker_buildx_url="https://github.com/docker/buildx"
@@ -885,7 +885,7 @@ if [ "${INSTALL_DOCKER_BUILDX}" = "true" ]; then
 
     cd /tmp
     wget https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name} || fallback_buildx "$docker_buildx_url"
-    
+
     docker_home="/usr/libexec/docker"
     cli_plugins_dir="${docker_home}/cli-plugins"
 
@@ -1005,7 +1005,7 @@ if [ "${IPTABLES_SWITCH_AT_RUNTIME}" = "true" ] && [ "${ADJUSTED_ID}" = "debian"
 << 'EOF'
 # Prefer legacy only when the ip_tables kernel module is actually present.
 # (Do NOT call `iptables-legacy -L/-nL` to test this — it auto-modprobes ip_tables
-# and would defeat hosts/scenarios where the module is intentionally absent 
+# and would defeat hosts/scenarios where the module is intentionally absent
 # such as the newer kernels which leaves out ip_tables legacy.)
 if type iptables-legacy > /dev/null 2>&1 \
    && { grep -qE '^(ip_tables)\b' /proc/modules \

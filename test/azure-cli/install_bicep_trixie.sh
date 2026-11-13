@@ -16,4 +16,3 @@ check "az bicep" az bicep version
 
 # Report result
 reportResults
-

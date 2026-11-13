@@ -39,4 +39,3 @@ check "containerd-snapshotter active" \
     bash -c "docker info 2>/dev/null | grep -qiE 'driver-type: io.containerd.snapshotter.v1|Storage Driver: overlayfs'"
 
 reportResults
-

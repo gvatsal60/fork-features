@@ -27,6 +27,3 @@ check "conda-install-pytorch" bash -c "conda create --name test-env -c conda-for
 
 # Report result
 reportResults
-
-
-

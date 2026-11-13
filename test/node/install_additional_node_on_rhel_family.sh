@@ -14,4 +14,3 @@ check "v20_installed" bash -c "ls -1 /usr/local/share/nvm/versions/node | grep 2
 
 # Report result
 reportResults
-

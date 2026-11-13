@@ -26,7 +26,7 @@ INSTALL_TFSEC=${INSTALLTFSEC:-false}
 INSTALL_TERRAFORM_DOCS=${INSTALLTERRAFORMDOCS:-false}
 TERRAFORM_DOCS_VERSION="${TERRAFORMDOCSVERSION:-"latest"}"
 CUSTOM_DOWNLOAD_SERVER="${CUSTOMDOWNLOADSERVER:-""}"
-# This is because ubuntu noble, ubuntu resolute and debian trixie don't support the old format of GPG keys and validation 
+# This is because ubuntu noble, ubuntu resolute and debian trixie don't support the old format of GPG keys and validation
 NEW_GPG_CODENAMES="trixie noble resolute"
 
 TERRAFORM_SHA256="${TERRAFORM_SHA256:-"automatic"}"
@@ -97,7 +97,7 @@ get_gpg_key_servers() {
     fi
 }
 
-# Import the specified key in a variable name passed in as 
+# Import the specified key in a variable name passed in as
 receive_gpg_keys() {
     local keys=${!1}
     local keyring_args=""
@@ -117,7 +117,7 @@ receive_gpg_keys() {
     export GNUPGHOME="/tmp/tmp-gnupg"
     mkdir -p ${GNUPGHOME}
     chmod 700 ${GNUPGHOME}
-    
+
     # Special handling for HashiCorp GPG key on Ubuntu Noble
     if [ "$IS_GPG_NEW" -eq 1 ] && [ "$keys" = "$TERRAFORM_GPG_KEY" ]; then
         echo "(*) Ubuntu Noble detected, using Keybase for HashiCorp GPG key import...."
@@ -137,7 +137,7 @@ receive_gpg_keys() {
     local retry_count=0
     local gpg_ok="false"
     set +e
-    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ]; 
+    until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "5" ];
     do
         echo "(*) Downloading GPG key..."
         ( echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys) 2>&1 && gpg_ok="true"
@@ -154,8 +154,8 @@ receive_gpg_keys() {
         echo "(*) Resolving GPG keyserver IP address..."
         local keyserver_ip_address=$( dig +short keyserver.ubuntu.com | head -n1 )
         echo "(*) GPG keyserver IP address $keyserver_ip_address"
-        
-        until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "3" ]; 
+
+        until [ "${gpg_ok}" = "true" ] || [ "${retry_count}" -eq "3" ];
         do
             echo "(*) Downloading GPG key..."
             ( echo "${keys}" | xargs -n 1 gpg -q ${keyring_args} --recv-keys --keyserver ${keyserver_ip_address}) 2>&1 && gpg_ok="true"
@@ -181,7 +181,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -241,7 +241,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -294,14 +294,14 @@ get_previous_version() {
     local repo_url=$2
     local variable_name=$3
     prev_version=${!variable_name}
-    
+
     output=$(curl -s "$repo_url");
 
     # install jq
     check_packages jq
-    
+
     message=$(echo "$output" | jq -r '.message')
-    
+
     if [[ $message == "API rate limit exceeded"* ]]; then
         echo -e "\nAn attempt to find latest version using GitHub Api Failed... \nReason: ${message}"
         echo -e "\nAttempting to find latest version using GitHub tags."
@@ -311,7 +311,7 @@ get_previous_version() {
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -511,7 +511,7 @@ if [ "${TFLINT_VERSION}" != "none" ]; then
     echo "Downloading tflint..."
     TFLINT_FILENAME="tflint_linux_${architecture}.zip"
     install_tflint "$TFLINT_VERSION"
-    if grep -q "Not Found" "/tmp/tf-downloads/${TFLINT_FILENAME}"; then 
+    if grep -q "Not Found" "/tmp/tf-downloads/${TFLINT_FILENAME}"; then
         install_previous_version TFLINT_VERSION "$tflint_url" "install_tflint"
     fi
     if [ "${TFLINT_SHA256}" != "dev-mode" ]; then
@@ -622,7 +622,7 @@ if [ "${INSTALL_SENTINEL}" = "true" ]; then
                 verify_signature TERRAFORM_GPG_KEY "$sha256sums_url" "$sig_url" "sentinel_checksums.txt" "sentinel_checksums.txt.sig"
             fi
             # Verify the SHASUM matches the archive
-            shasum -a 256 --ignore-missing -c sentinel_checksums.txt            
+            shasum -a 256 --ignore-missing -c sentinel_checksums.txt
         else
             echo "${SENTINEL_SHA256} *${SENTINEL_FILENAME}" >sentinel_checksums.txt
         fi
@@ -646,7 +646,7 @@ if [ "${INSTALL_TFSEC}" = "true" ]; then
     tfsec_filename="tfsec_${TFSEC_VERSION}_linux_${architecture}.tar.gz"
     echo "(*) Downloading TFSec... ${tfsec_filename}"
     install_tfsec "$TFSEC_VERSION"
-    if grep -q "Not Found" "/tmp/tf-downloads/${tfsec_filename}"; then 
+    if grep -q "Not Found" "/tmp/tf-downloads/${tfsec_filename}"; then
         install_previous_version TFSEC_VERSION $tfsec_url "install_tfsec"
         tfsec_filename="tfsec_${TFSEC_VERSION}_linux_${architecture}.tar.gz"
     fi

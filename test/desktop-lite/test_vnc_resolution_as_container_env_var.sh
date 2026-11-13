@@ -25,9 +25,9 @@ check_w_config_resolution() {
     configResolution=$1
     actualResolution=$2
 
-    if echo "$1" | grep -q "$2"; then 
+    if echo "$1" | grep -q "$2"; then
         echo -e "\n👍👍 ${GREEN}Configured resolution i.e. ${YELLOW}$configResolution${GREEN} has been set as vnc resolution i.e. ${YELLOW}$actualResolution${GREEN} in container.${NC}"
-    else 
+    else
         echo -e "\n❌❌ ${GREEN}Configured resolution i.e. ${YELLOW}$configResolution${GREEN} couldn't be set as vnc resolution i.e. ${YELLOW}$actualResolution${GREEN} in container.${NC}"
     fi
 }
@@ -35,7 +35,7 @@ check_w_config_resolution() {
 check "Whether xtigervnc is Running" check_process_running 5901
 resolution=$(ps -x -ww | grep Xtigervnc | awk "{for(i=1;i<=NF;i++) if (\$i ~ /-geometry/) {print \$(i+1); exit}}")
 check "xtigervnc resolution" bash -c '$resolution'
-check_w_config_resolution $VNC_RESOLUTION $resolution 
+check_w_config_resolution $VNC_RESOLUTION $resolution
 sleep 2
 check "Whether no_vnc is Running" check_process_running 6080
 

@@ -13,7 +13,7 @@ SSHD_PORT="${SSHD_PORT:-"2222"}"
 USERNAME="${USERNAME:-"${_REMOTE_USER:-"automatic"}"}"
 START_SSHD="${START_SSHD:-"false"}"
 NEW_PASSWORD="${NEW_PASSWORD:-"skip"}"
-GATEWAY_PORTS="${GATEWAYPORTS:-"no"}" 
+GATEWAY_PORTS="${GATEWAYPORTS:-"no"}"
 
 set -e
 
@@ -101,7 +101,7 @@ tee /usr/local/share/ssh-init.sh > /dev/null \
 # This script is intended to be run as root with a container that runs as root (even if you connect with a different user)
 # However, it supports running as a user other than root if passwordless sudo is configured for that same user.
 
-set -e 
+set -e
 
 sudoIf()
 {

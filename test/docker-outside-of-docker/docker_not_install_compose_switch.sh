@@ -12,7 +12,7 @@ check_compose_switch_installation() {
     if [ ! -x "$COMPOSE_SWITCH_BINARY" ]; then
         echo "compose-switch binary not found at $COMPOSE_SWITCH_BINARY"
         echo -e "\n❎ compose-switch is not installed"
-    else 
+    else
         compose_switch_version=$("$COMPOSE_SWITCH_BINARY" --version | awk '{print $4}')
         if [ -z "$compose_switch_version" ]; then
             echo "Unable to determine compose-switch version"
@@ -26,4 +26,4 @@ check_compose_switch_installation() {
 check "Check whether compose-switch is installed" check_compose_switch_installation
 
 reportResults
- 
+

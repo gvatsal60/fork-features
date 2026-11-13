@@ -19,4 +19,3 @@ check "cuda-12+nvcc" test -e '/usr/local/cuda-12.5/bin/nvcc'
 
 # Report result
 reportResults
-

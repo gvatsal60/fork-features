@@ -84,7 +84,7 @@ install_sdk() {
         # Assume version is an exact version string like '6.0.413' or '8.0.100-rc.2.23425.18'
         version="$inputVersion"
     fi
-    
+
     local cmd=("$DOTNET_INSTALL_SCRIPT" "--version" "$version" "--install-dir" "$DOTNET_ROOT")
     if [ -n "$channel" ]; then
         cmd+=("--channel" "$channel")

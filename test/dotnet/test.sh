@@ -14,7 +14,7 @@ source dotnet_env.sh
 source dotnet_helpers.sh
 
 check "dotnet is installed in DOTNET_ROOT and execute permission is granted" \
-test -x "$DOTNET_ROOT/dotnet" 
+test -x "$DOTNET_ROOT/dotnet"
 
 check "dotnet is symlinked correctly in /usr/bin" \
 test -L /usr/bin/dotnet -a "$(readlink -f /usr/bin/dotnet)" = "$DOTNET_ROOT/dotnet"

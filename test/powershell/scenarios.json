@@ -45,11 +45,11 @@
     "features": {
       "powershell": {}
     }
-  },  
+  },
   "powershell_alma_linux": {
     "image": "almalinux:9",
     "features": {
-      "powershell": {} 
+      "powershell": {}
     }
   },
   "powershell_stable_version": {

@@ -12,7 +12,7 @@ INSTALL_TOOLKIT=${INSTALLTOOLKIT}
 CUDA_VERSION=${CUDAVERSION}
 CUDNN_VERSION=${CUDNNVERSION}
 
-. /etc/os-release 
+. /etc/os-release
 
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
@@ -35,10 +35,10 @@ check_packages() {
     fi
 }
 
-if [ $VERSION_CODENAME = "bookworm" ] || [ $VERSION_CODENAME = "jammy" ] && [ $CUDA_VERSION \< 11.7 ]; then  
+if [ $VERSION_CODENAME = "bookworm" ] || [ $VERSION_CODENAME = "jammy" ] && [ $CUDA_VERSION \< 11.7 ]; then
     echo "(!) Unsupported distribution version '${VERSION_CODENAME}' for CUDA < 11.7"
     exit 1
-fi  
+fi
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -60,7 +60,7 @@ case $ARCH in
 esac
 
 # Add NVIDIA's package repository to apt so that we can download packages
-# Updating the repo to ubuntu2204 as ubuntu 20.04 is going out of support. 
+# Updating the repo to ubuntu2204 as ubuntu 20.04 is going out of support.
 NVIDIA_REPO_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/$NVIDIA_ARCH"
 
 

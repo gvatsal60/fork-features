@@ -74,14 +74,14 @@
                 "components": "none"
             }
         }
-    },    
+    },
     "rust_with_centos": {
         "image": "centos:centos7",
         "features": {
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -91,7 +91,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -101,7 +101,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -111,7 +111,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -121,7 +121,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -131,7 +131,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -141,7 +141,7 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
     },
@@ -151,8 +151,8 @@
             "rust": {
                 "version": "latest",
                 "targets": "aarch64-unknown-linux-gnu",
-                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"                
+                "components": "rust-analyzer,rust-src,rustfmt,clippy,rust-docs"
             }
         }
-    }                                                                
+    }
 }

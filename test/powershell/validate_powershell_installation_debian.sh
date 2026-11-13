@@ -17,4 +17,3 @@ check "pwsh is in PATH" bash -c "command -v pwsh"
 
 # Report result
 reportResults
-

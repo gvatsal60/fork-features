@@ -6,7 +6,7 @@
         "version": "latest"
       }
     }
-  },  
+  },
   "install_extensions_trixie": {
     "image": "mcr.microsoft.com/devcontainers/base:trixie",
     "user": "vscode",

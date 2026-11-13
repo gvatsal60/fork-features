@@ -13,7 +13,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     echo "${!variable_name}"
     echo "$(echo "${requested_version}" | grep -o "." | wc -l)"
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
@@ -75,7 +75,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -116,14 +116,14 @@ install_previous_version() {
     wget -O php.tar.xz "$PHP_URL"
 }
 
-install_php() {  
+install_php() {
     # trying to install with a possible new tag not having a released source binary yet
     PHP_VERSION="8.3.xyz"
 
     init_php_install
 
     wget -O php.tar.xz "$PHP_URL" || install_previous_version
-    
+
     tar -xf $PHP_SRC_DIR/php.tar.xz -C "$PHP_SRC_DIR" --strip-components=1
     cd $PHP_SRC_DIR;
 
@@ -135,7 +135,7 @@ install_php() {
     PHP_MINOR_VERSION=${versions[1]}
 
     VERSION_CONFIG=""
-    if (( $(($PHP_MAJOR_VERSION)) >= 8 )) || (( $(($PHP_MAJOR_VERSION)) == 7 && $(($PHP_MINOR_VERSION)) >= 4 )); then 
+    if (( $(($PHP_MAJOR_VERSION)) >= 8 )) || (( $(($PHP_MAJOR_VERSION)) == 7 && $(($PHP_MINOR_VERSION)) >= 4 )); then
         VERSION_CONFIG="--with-pear"
     fi
 
@@ -198,4 +198,3 @@ if [ "${PHP_VERSION}" != "none" ]; then
 fi
 
 echo -e "\nInstalled PHP Version by Test: 👇 "; php -v;
-

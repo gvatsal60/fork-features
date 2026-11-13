@@ -35,7 +35,7 @@ if [ "${ID}" = "alpine" ]; then
     apk add --no-cache bash
 fi
 if [ "${ID}" = "azurelinux" ]; then
-    tdnf install -y curl git 
+    tdnf install -y curl git
 fi
 exec /bin/bash "$(dirname $0)/main.sh" "$@"
 exit $?

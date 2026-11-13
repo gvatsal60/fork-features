@@ -6,4 +6,3 @@ set -e
 source dev-container-features-test-lib
 
 ./install_extensions.sh
-

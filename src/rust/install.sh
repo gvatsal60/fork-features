@@ -178,7 +178,7 @@ updaterc() {
     if [ "${UPDATE_RC}" = "true" ]; then
         echo "Updating shell configuration files..."
         local bashrc_file="/etc/bash.bashrc"
-        
+
         # Different distributions use different bashrc locations
         if [ ! -f "$bashrc_file" ]; then
             if [ -f "/etc/bashrc" ]; then
@@ -187,11 +187,11 @@ updaterc() {
                 bashrc_file="/etc/bash/bashrc"
             fi
         fi
-        
+
         if [ -f "$bashrc_file" ] && [[ "$(cat "$bashrc_file")" != *"$1"* ]]; then
             echo -e "$1" >> "$bashrc_file"
         fi
-        
+
         if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
             echo -e "$1" >> /etc/zsh/zshrc
         fi

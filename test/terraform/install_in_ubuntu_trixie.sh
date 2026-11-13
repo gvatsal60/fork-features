@@ -15,5 +15,3 @@ check "tflint" tflint --version
 
 # Report results
 reportResults
-
-

@@ -126,7 +126,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -216,7 +216,7 @@ get_previous_version() {
     local repo_url=$2
     local variable_name=$3
     prev_version=${!variable_name#v}
-    
+
     output=$(curl -s "$repo_url");
 
     check_packages jq
@@ -227,11 +227,11 @@ get_previous_version() {
         echo -e "\nAttempting to find latest version using GitHub tags."
         find_prev_version_from_git_tags prev_version "$url" "tags/v"
         declare -g ${variable_name}="v${prev_version}"
-    else 
+    else
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -352,8 +352,8 @@ if [ "${MINIKUBE_VERSION}" != "none" ]; then
             MINIKUBE_VERSION="v${MINIKUBE_VERSION}"
         fi
     fi
-    # latest is also valid in the download URLs 
-    curl -sSL -o /usr/local/bin/minikube "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-${architecture}"    
+    # latest is also valid in the download URLs
+    curl -sSL -o /usr/local/bin/minikube "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-${architecture}"
     chmod 0755 /usr/local/bin/minikube
     if [ "$MINIKUBE_SHA256" = "automatic" ]; then
         MINIKUBE_SHA256="$(curl -sSL "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-${architecture}.sha256")"

@@ -14,7 +14,7 @@ resolve_prerelease_version() {
 }
 
 # Tests the tag-resolution pipeline used by src/copilot-cli/install.sh for the
-# "prerelease" channel. 
+# "prerelease" channel.
 
 check "copilot binary is on PATH" which copilot
 check "copilot reports a version" bash -c "copilot -v"

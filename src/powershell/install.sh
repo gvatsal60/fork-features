@@ -58,20 +58,20 @@ clean_cache() {
 resolve_powershell_version() {
     local version_tag="$1"
     local redirect_url="https://aka.ms/powershell-release?tag=${version_tag}"
-    
+
     # Follow the redirect and extract the version from the final URL
     local resolved_url
     resolved_url=$(curl -sSL -o /dev/null -w '%{url_effective}' "${redirect_url}")
-    
+
     # Extract version from URL (e.g., https://github.com/PowerShell/PowerShell/releases/tag/v7.4.7 -> 7.4.7)
     local resolved_version
     resolved_version=$(echo "${resolved_url}" | grep -oP 'v\K[0-9]+\.[0-9]+\.[0-9]+(-\w+\.\d+)?' || echo "")
-    
+
     if [ -z "${resolved_version}" ]; then
         echo "Failed to resolve version for tag: ${version_tag}" >&2
         return 1
     fi
-    
+
     echo "${resolved_version}"
 }
 # Install dependencies for RHEL/CentOS/AlmaLinux (DNF-based systems)
@@ -95,9 +95,9 @@ install_powershell_dnf() {
     # Install necessary dependencies
     dnf install -y krb5-libs libicu openssl-libs zlib
 
-    # Add Microsoft PowerShell repository 
+    # Add Microsoft PowerShell repository
         curl "https://packages.microsoft.com/config/rhel/9.0/prod.repo" > /etc/yum.repos.d/microsoft.repo
-    
+
     # Install PowerShell
      dnf install --assumeyes powershell
 }
@@ -191,7 +191,7 @@ find_version_from_git_tags() {
     local repository=$2
     local prefix=${3:-"tags/v"}
     local separator=${4:-"."}
-    local last_part_optional=${5:-"false"}    
+    local last_part_optional=${5:-"false"}
     if [ "$(echo "${requested_version}" | grep -o "." | wc -l)" != "2" ]; then
         local escaped_separator=${separator//./\\.}
         local last_part
@@ -253,17 +253,17 @@ else
     return 1
 fi
 
-   
+
 }
 
 install_using_apt() {
     # Install dependencies
     check_packages apt-transport-https curl ca-certificates gnupg2 dirmngr
     # Import key safely (new 'signed-by' method rather than deprecated apt-key approach) and install
-   
+
     curl -sSL ${MICROSOFT_GPG_KEYS_URI} | gpg --dearmor > /usr/share/keyrings/microsoft-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/microsoft-${ID}-${VERSION_CODENAME}-prod ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/microsoft.list
-    
+
 
     # Update lists
     apt-get update -yq
@@ -272,7 +272,7 @@ install_using_apt() {
     if [ "${POWERSHELL_VERSION}" = "latest" ] || [ "${POWERSHELL_VERSION}" = "lts" ] || [ "${POWERSHELL_VERSION}" = "stable" ]; then
         # Empty, meaning grab whatever "latest" is in apt repo
         version_suffix=""
-    else    
+    else
         version_suffix="=$(apt-cache madison powershell | awk -F"|" '{print $2}' | sed -e 's/^[ \t]*//' | grep -E -m 1 "^(${POWERSHELL_VERSION})(\.|$|\+.*|-.*)")"
 
         if [ -z ${version_suffix} ] || [ ${version_suffix} = "=" ]; then
@@ -319,7 +319,7 @@ find_prev_version_from_git_tags() {
             ((breakfix=breakfix-1))
             if [ "${breakfix}" = "0" ] && [ "${last_part_optional}" = "true" ]; then
                 declare -g ${variable_name}="${major}.${minor}"
-            else 
+            else
                 declare -g ${variable_name}="${major}.${minor}.${breakfix}"
             fi
         fi
@@ -332,21 +332,21 @@ get_previous_version() {
     local repo_url=$2
     local variable_name=$3
     prev_version=${!variable_name}
-    
+
     output=$(curl -s "$repo_url");
     check_packages jq
     message=$(echo "$output" | jq -r '.message')
-    
+
     if [[ $message == "API rate limit exceeded"* ]]; then
         echo -e "\nAn attempt to find latest version using GitHub Api Failed... \nReason: ${message}"
         echo -e "\nAttempting to find latest version using GitHub tags."
         find_prev_version_from_git_tags prev_version "$url" "tags/v"
         declare -g ${variable_name}="${prev_version}"
-    else 
+    else
         echo -e "\nAttempting to find latest version using GitHub Api."
         version=$(echo "$output" | jq -r '.tag_name')
         declare -g ${variable_name}="${version#v}"
-    fi  
+    fi
     echo "${variable_name}=${!variable_name}"
 }
 
@@ -403,10 +403,10 @@ install_using_github() {
     fi
 
     install_pwsh "${POWERSHELL_VERSION}"
-    if grep -q "Not Found" "${powershell_filename}"; then 
+    if grep -q "Not Found" "${powershell_filename}"; then
         install_prev_pwsh $pwsh_url
     fi
-    
+
     # download the latest version of powershell and extracting the file to powershell directory
     wget https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/${powershell_filename}
     mkdir ~/powershell
@@ -448,8 +448,8 @@ if ! type pwsh >/dev/null 2>&1; then
             echo "Warning: Could not resolve '${POWERSHELL_VERSION}' version. Falling back to 'latest'."
             POWERSHELL_VERSION="latest"
         fi
-    fi    
-    
+    fi
+
     # Source /etc/os-release to get OS info
     . /etc/os-release
     architecture="$(uname -m)"
@@ -461,9 +461,9 @@ if ! type pwsh >/dev/null 2>&1; then
 
     if [[ "${POWERSHELL_ARCHIVE_ARCHITECTURES}" = *"${POWERSHELL_ARCHIVE_ARCHITECTURES_UBUNTU}"* ]] && [[  "${POWERSHELL_ARCHIVE_VERSION_CODENAMES}" = *"${VERSION_CODENAME}"* ]] && [[ "${POWERSHELL_VERSION}" != *"preview"* ]] && [[ "${POWERSHELL_VERSION}" != *"-rc."* ]]; then
         install_using_apt || use_github="true"
-    elif [[ "${POWERSHELL_ARCHIVE_ARCHITECTURES}" = *"${POWERSHELL_ARCHIVE_ARCHITECTURES_ALMALINUX}"* ]] && [[ "${POWERSHELL_VERSION}" != *"preview"* ]] && [[ "${POWERSHELL_VERSION}" != *"-rc."* ]]; then 
+    elif [[ "${POWERSHELL_ARCHIVE_ARCHITECTURES}" = *"${POWERSHELL_ARCHIVE_ARCHITECTURES_ALMALINUX}"* ]] && [[ "${POWERSHELL_VERSION}" != *"preview"* ]] && [[ "${POWERSHELL_VERSION}" != *"-rc."* ]]; then
         install_using_dnf && install_powershell_dnf || use_github="true"
-    else 
+    else
        use_github="true"
     fi
 
@@ -482,8 +482,8 @@ if [ ${#POWERSHELL_MODULES[@]} -gt 0 ]; then
     for i in "${modules[@]}"
     do
         module_parts=(`echo ${i} | tr '==' ' '`)
-        module_name="${module_parts[0]}"  
-        args="-Name ${module_name} -AllowClobber -Force -Scope AllUsers"  
+        module_name="${module_parts[0]}"
+        args="-Name ${module_name} -AllowClobber -Force -Scope AllUsers"
         if [ "${#module_parts[@]}" -eq 2 ]; then
             module_version="${module_parts[1]}"
             echo "Installing ${module_name} v${module_version}"

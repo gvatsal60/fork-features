@@ -29,4 +29,3 @@ check "rust-docs is installed" check_component_installed "rust-docs"
 
 # Report result
 reportResults
-
